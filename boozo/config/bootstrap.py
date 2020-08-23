@@ -80,15 +80,16 @@ def generate_cfgyml(**kwargs):
   fio.yml_safe_dump(filepath, kwargs['_ENVCFG'])
   return filepath
 
-def make_dirs(*args, gitkeep=True):
+def make_dirs(*args, gitkeep=False):
   """Create directories."""
   for p in args:
     _p = pathlib.Path(p)
     log.debug("make_dirs:_p: {}".format(_p))
     fio.mkdir_p(_p)
-    ## Creates a an empty file for git 
-    with open(os.path.join(_p, '.gitkeep'), 'w') as f:
-      pass
+    ## Creates a an empty file for git
+    if gitkeep:
+      with open(os.path.join(_p, '.gitkeep'), 'w') as f:
+        pass
 
 def _create_link_(l, newpath=None):
   """Create the link based on path and optional newpath"""

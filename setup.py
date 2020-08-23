@@ -1,7 +1,7 @@
 ## Copyright (c) 2020 mangalbhaskar.
 """setup script."""
 __author__ = 'skillplot'
-__version__ = '1.0.6'
+__version__ = '1.0.7'
 
 _name_ = 'pyboozo' 
 
