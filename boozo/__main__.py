@@ -16,6 +16,9 @@ import click
 this = sys.modules[__name__]
 this_dir = os.path.dirname(__file__)
 
+clear = lambda: os.system('clear')
+clear()
+
 from .config._log_ import logcfg
 log = logging.getLogger('__main__.'+__name__)
 logging.config.dictConfig(logcfg)
@@ -25,16 +28,11 @@ from .config.env import EnvCfgo
 from .utils import snek
 from .utils import color
 
-
 default_root = os.path.join(os.getcwd(), "{}-{}".format(os.path.basename(this_dir), 'hub'))
-clear = lambda: os.system('clear')
 
 def echo():
   log.debug("__main__.py")
   pass
-
-
-clear()
 
 @click.command()
 @click.option('--name', prompt=color.text('Application name', cc=color.on_cya),

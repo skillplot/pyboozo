@@ -269,7 +269,8 @@ class EnvCfgo(object):
   def app_prefix(self, s=''):
     """app prefix char should limit to 3 char maximum to avoid too long names."""
     log.debug("app prefix char should limit to 3 char maximum to avoid too long names.")
-    return re.sub('[^A-Za-z]+', '', s.upper())[0:3] if s else self._PREFIX
+    _prefix = re.sub('[^A-Za-z]+', '', s.upper())[0:3] if s else self._PREFIX
+    return '_'+_prefix
 
   def get(self, a):
     return self._PREFIX+'_'+a.upper().split('__')[-1]

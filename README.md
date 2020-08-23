@@ -71,7 +71,7 @@ This will create the required directory structure and generate the configuration
 
 **NOTE:**
 * name supports only `a-z`, `/` and `-`; maximum 7 chars long names
-* prefix is only `a-z` and maximum 3 chars long
+* prefix is only `a-z` and maximum 3 chars long; implicitly `_` will be appended to the prefix automatically
 * `--gitkeep` creates empty .gitkeep file in each directory
 * `--timestamp` creates timestamped based data directory symlinked to common name, allows to easily link to different mount partitions by changing the symlinks
 * `--name` and `--prefix` options provides for the unique namespace and configurations;
