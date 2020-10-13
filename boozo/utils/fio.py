@@ -101,13 +101,33 @@ def list_files(p, ext=None):
     if os.path.isfile(f):
      yield f.as_posix()
 
+
+def get_filelist(basepath, exts=[]):
+  """Returns the filtered list of files based on the given list of extensions.
+
+  Args:
+    basepath (string): basepath directory to scan
+    exts (list, optional): list of file extensions with dot.
+                @Example: ['.jpg','.png']
+  """
+  filelist = []
+  for f in os.listdir(basepath):
+    if f.is_file():
+      if exts and len(exts) > 0:
+        if os.path.splitext(f.name)[-1].lower() in exts:
+          filelist.append(f.path)
+      else:
+        filelist.append(f.path)
+  return filelist
+
+
 def list_dirs(p):
   """List directories in a given path."""
   for f in pathlib.Path(p).glob(r'**/*'):
     if os.path.isdir(f):
      yield f.as_posix()
 
-def mkdir_p(path):
+def mkdir_p(p):
   """mkdir -p` linux command functionality.
 
   References:
@@ -115,12 +135,12 @@ def mkdir_p(path):
   * https://stackoverflow.com/questions/20794/find-broken-symlinks-with-python
   """
   try:
-    os.makedirs(path)
+    os.makedirs(p)
   except OSError as exc:  ## Python >2.5
-    if exc.errno == errno.EEXIST and os.path.isdir(path):
+    if exc.errno == errno.EEXIST and os.path.isdir(p):
       pass
-    elif os.path.islink(path) and not os.path.exists(path):
-      os.remove(path)
-      mkdir_p(path)
+    elif os.path.islink(p) and not os.path.exists(p):
+      os.remove(p)
+      mkdir_p(p)
     else:
       raise

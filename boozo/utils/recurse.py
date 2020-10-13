@@ -26,16 +26,47 @@ def get_from_dict(dictionary, keys=None):
     if type(vval) == dict:
       yield from get_from_dict(vval)
 
-def get_basepath(path):
+def get_basepath(p):
   """Ensures the last Directory of a path in a consistent ways.
   basepath is returned for a file or path. It takes care of
   trailing slash for a file or a directory.
   """
-  if os.path.isdir(path):
-    base_path = os.path.join(path,'')
+  if os.path.isdir(p):
+    base_path = os.path.join(p,'')
   else:
-    base_path = os.path.join(os.path.dirname(path),'')
+    base_path = os.path.join(os.path.dirname(p),'')
   _bp = base_path.rstrip(os.path.sep)
   if os.path.isfile(_bp):
     _bp = get_basepath(_bp)
   return _bp
+
+
+def scandir(basepath, exts=[]):
+  """Scan a directory re-currsively and returns the list of sub-folders and files in the given directory,
+  given the list of extension.
+
+  Reference:
+  `Adapted from https://stackoverflow.com/a/59803793 credit: https://stackoverflow.com/users/2441026/user136036`
+
+  Args:
+    basepath (string): basepath directory to scan
+    exts (list, optional): list of file extensions with dot.
+                @Example: ['.jpg','.png']
+  """
+  subfolders, filelist = [], []
+  for f in os.scandir(basepath):
+    if f.is_dir():
+      subfolders.append(f.path)
+    if f.is_file():
+      if len(exts) > 0:
+        if os.path.splitext(f.name)[1].lower() in exts:
+          filelist.append(f.path)
+          filelist.append()
+      else:
+        filelist.append(f.path)
+
+  for basepath in list(subfolders):
+    sf, f = scandir(basepath, exts)
+    subfolders.extend(sf)
+    filelist.extend(f)
+  return subfolders, filelist
