@@ -1,23 +1,19 @@
 ## Copyright (c) 2020 mangalbhaskar
 """Common date and timestamp utilities and inter-conversion of them.
 
-Dependencies:
-* `arrow` for timezone and timestamp handling.
+Dependencies: arrow
 
 References:
 * http://zetcode.com/python/arrow/  
 """
 __author__ = 'mangalbhaskar'
 
-import logging
-import logging.config
+
 import os
 
 import arrow
 
-from boozo.config._log_ import logcfg
-log = logging.getLogger('__main__.'+__name__)
-logging.config.dictConfig(logcfg)
+from boozo.boot._log_ import log
 
 from .typeformats import *
 
@@ -30,11 +26,18 @@ def now():
   date_time_zone = now.format(_date_format_)
   return date_time_zone
 
+
 def ts():
   """returns the timestamp in the `_timestamp_format_` format"""
   import datetime
   ts = (_timestamp_format_).format(datetime.datetime.now())
   return ts
+
+
+def timestamp():
+  """wrapper function."""
+  return ts()
+
 
 def modified_on(filepath, ts=False):
   """returns the last modified timestamp with timezone.
@@ -47,6 +50,7 @@ def modified_on(filepath, ts=False):
     modified_on = ts_from_datestring(modified_on)
   return modified_on
 
+
 def date_from_ts(ts):
   """returns the date object from the given string date in the `_date_format_`
 
@@ -56,6 +60,7 @@ def date_from_ts(ts):
   ar = arrow.get(ts, _date_format_)
   dt = ar.date()
   return dt
+
 
 def ts_from_datestring(dt):
   """returns the timestamp in the `_timestamp_format_` given the date string in the `_date_format_` format

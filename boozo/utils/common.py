@@ -2,15 +2,13 @@
 """Commonly utility functions."""
 __author__ = 'mangalbhaskar'
 
-import logging
-import logging.config
+
 import os
 import re
 import sys
 
-from boozo.config._log_ import logcfg
-log = logging.getLogger('__main__.'+__name__)
-logging.config.dictConfig(logcfg)
+from boozo.boot._log_ import log
+
 
 def str_to_list(word, dl=','):
   """Converts a string to a list for the given delimiter."""

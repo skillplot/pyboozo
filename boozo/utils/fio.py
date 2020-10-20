@@ -1,14 +1,13 @@
 ## Copyright (c) 2020 mangalbhaskar
 """Common File I/O utilities.
 
-Dependencies:
-* edict, pandas, yaml
+Dependencies: easydict, pandas, yaml
 """
 __author__ = 'mangalbhaskar'
 
+
 import errno
 import logging
-import logging.config
 import os
 import json
 import pathlib
@@ -18,9 +17,8 @@ import time
 from easydict import EasyDict as edict
 import yaml
 
-from boozo.config._log_ import logcfg
-log = logging.getLogger('__main__.'+__name__)
-logging.config.dictConfig(logcfg)
+from boozo.boot._log_ import log
+#log = logging.getLogger('__main__.'+__name__)
 
 this = sys.modules[__name__]
 
@@ -38,6 +36,7 @@ def load_file(filepath, withedict=True):
     log.exception("Invalid filepath: {}".format(filepath), exc_info=True)
   return fc
 
+
 def yml_load(filepath, withedict=True):
   """Safe load yaml file as easy dictionary object."""
   fc = None
@@ -52,6 +51,7 @@ def yml_load(filepath, withedict=True):
     log.debug('Done (t={:0.2f}s)'.format(time.time()- tic))
   return fc
 
+
 def json_load(filepath, withedict=True):
   """Load json file as easy dictionary object."""
   fc = None
@@ -64,6 +64,7 @@ def json_load(filepath, withedict=True):
     log.info('Done (t={:0.2f}s)'.format(time.time()- tic))
   return fc
 
+
 def csv_load(filepath, withedict=True):
   """Load csv file as easy dictionary object."""
   import pandas as pd
@@ -72,6 +73,7 @@ def csv_load(filepath, withedict=True):
   else:
     fc = pd.read_csv(filepath)
   return fc
+
 
 def read_csv_line(filepath, delimiter = ','):
   """Read CSV Line as a generator for large csv files."""
@@ -82,10 +84,12 @@ def read_csv_line(filepath, delimiter = ','):
     for line in gen:
       yield line.rstrip('\n').split(delimiter)
 
+
 def yml_safe_dump(filepath, o, default_flow_style=False):
   """Create yaml file from python dictionary object."""
   with open(filepath,'w') as f:
     yaml.safe_dump(o, f, default_flow_style=default_flow_style)
+
 
 def json_dump(filepath, o):
   """Create json file from python dictionary object."""
@@ -121,11 +125,21 @@ def get_filelist(basepath, exts=[]):
   return filelist
 
 
+def get_only_files_in_dir(path):
+  """returns file in a director as a generator
+  Usage: list( get_only_files_in_dir(path) )
+  """
+  for file in os.listdir(path):
+    if os.path.isfile(os.path.join(path, file)):
+      yield os.path.join(path, file)
+
+
 def list_dirs(p):
   """List directories in a given path."""
   for f in pathlib.Path(p).glob(r'**/*'):
     if os.path.isdir(f):
      yield f.as_posix()
+
 
 def mkdir_p(p):
   """mkdir -p` linux command functionality.

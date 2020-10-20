@@ -1,5 +1,3 @@
 ## Copyright (c) 2020 mangalbhaskar.
-"""
-Utility package for pyboozo.
-"""
+"""boot package for pyboozo."""
 __author__ = 'mangalbhaskar'

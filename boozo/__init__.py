@@ -2,7 +2,7 @@
 """An opinionated software development environment setup and configuration generator.
 Create the required project structure and the environment configurations."""
 __author__ = 'mangalbhaskar'
-__version__ = '1.0.8'
+__version__ = '1.0.9'
 
 from pkgutil import extend_path
 

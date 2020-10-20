@@ -1,7 +1,7 @@
 ## Copyright (c) 2020 mangalbhaskar.
 """setup script."""
 __author__ = 'skillplot'
-__version__ = '1.0.8'
+__version__ = '1.0.9'
 
 _name_ = 'pyboozo' 
 
@@ -28,7 +28,7 @@ setuptools.setup(
   ,author_email='skillplot@gmail.com'
   ,url = 'https://github.com/{}/{}'.format(__author__, _name_)
   ,project_urls={
-      'Download': 'https://github.com/{}/{}/archive/{}.tar.gz'.format(__author__, _name_, __version__)
+    'Download': 'https://github.com/{}/{}/archive/{}.tar.gz'.format(__author__, _name_, __version__)
   }
   ,keywords = ['software development', 'configuration generator', 'environment setup']
   ,install_requires=[
@@ -46,7 +46,7 @@ setuptools.setup(
   ]
   ,entry_points={
     'console_scripts':[
-      'boozo=boozo.__main__:main'
+      'boozo=boozo.__main__:cmd'
     ]
     ,'gui_scripts':[]
   }

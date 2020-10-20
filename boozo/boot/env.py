@@ -1,6 +1,8 @@
 ## Copyright (c) 2020 mangalbhaskar.
 """Environment configuration variables and setup.
 
+CAUTION: Do not change the order of variable initializations.
+
 References:
 * https://stackoverflow.com/questions/67631/how-to-import-a-module-given-the-full-path
 """
@@ -10,18 +12,14 @@ __all_ = [
   'EnvCfgo'
 ]
 
-import logging
-import logging.config
+
 import os
 import re
 import sys
 
-from boozo.config._log_ import logcfg
-log = logging.getLogger('__main__.'+__name__)
-logging.config.dictConfig(logcfg)
+from ._log_ import log
 
 from boozo.utils import cast
-from boozo.utils import common
 
 this = sys.modules[__name__]
 this_dir = os.path.dirname(__file__)
@@ -33,7 +31,9 @@ class EnvCfgo(object):
   _ROOT = None
   _NAME = 'boozo'
   _PREFIX = '_BZO'
-  _IS_TIMESTAMP_DATA_DIR = False
+  _IS_MOBILE_DIR = False
+  _IS_DATA_DIR = False
+  _IS_VMHOME = False
 
   _VMHOME = None
   _PYVENV_PATH = None
@@ -57,16 +57,16 @@ class EnvCfgo(object):
   _DATA_HOME = None
   _MOBILE_HOME = None
 
-  _DIR_PATH = None
-  _DATA_DIR_PATH = None
-  _MOBILE_DIR_PATH = None
+  _DIR_PATH = []
+  _DATA_DIR_PATH = []
+  _MOBILE_DIR_PATH = []
 
   _ALIAS = {
     '_HOME'
     ,'_NAME'
     ,'_SCRIPTS'
     ,'_APPS'
-    ,'_COMMON'
+    ,'_LIB'
     ,'_CFG'
     ,'_CONFIG'
     ,'_DATA_HOME'
@@ -83,51 +83,64 @@ class EnvCfgo(object):
   }
   _DIR = (
     'apps'
-    ,'common'
-    ,'dist'
+    ,'lib'
     ,'docs'
+    ,'notebooks'
     ,'plugins'
     ,'practice'
+    ,'projects'
     ,'scripts'
+    ,'_site'
     ,'tests'
     ,'www'
   )
   _DATA_DIR = (
-    'ant'
-    ,'aid'
-    ,'aid/tfrecords'
+    'var'
+    ,'var/ant'
+    ,'var/aid'
+    ,'var/aid/tfrecords'
+    ,'var/api'
+    ,'var/cloud'
+    ,'var/docker'
+    ,'var/kbank'
+    ,'var/mobile'
+    ,'var/npm-packages'
+    ,'var/reports'
+    ,'var/_site'
+    ,'var/team'
+    ,'var/team/images'
+    ,'var/tools'
+    ,'var/video'
+    ,'var/workspaces'
+    ,'var/external'
+    ,'var/downloads'
+    ,'var/public_html'
+    ,'var/samples'
+    ,'var/public'
+    ,'var/gaze'
+    ,'var/mmi'
+    ,'var/misc'
+    ,'mnt'
+    ,'tmp'
     ,'auth'
     ,'cfg'
-    ,'cloud'
+    ,'logs'
+    ,'logs/www/uploads'
+    ,'logs/www'
     ,'databases'
+    ,'databases/sqllite'
+    ,'databases/postgres'
     ,'databases/mongodb'
     ,'databases/mongodb/db'
     ,'databases/mongodb/logs'
     ,'databases/mongodb/key'
     ,'databases/mongodb/configdb'
-    ,'docker'
-    ,'downloads'
-    ,'external'
-    ,'kbank'
-    ,'logs'
-    ,'logs/www'
-    ,'mobile'
-    ,'mnt'
-    ,'npm-packages'
-    ,'public'
-    ,'public_html'
+    ,'dist'
+    ,'dist/dataset'
+    ,'dist/mobile'
     ,'release'
     ,'release/keras'
     ,'release/torch'
-    ,'reports'
-    ,'samples'
-    ,'_site'
-    ,'team'
-    ,'team/images'
-    ,'tools'
-    ,'tmp'
-    ,'uploads'
-    ,'workspaces'
   )
   _MOBILE_DIR = (
     'android'
@@ -142,33 +155,34 @@ class EnvCfgo(object):
     ,'_LSCRIPTS':'scripts/lscripts'
     ,'_PRACTICE':'practice'
     ,'_PLUGINS':'plugins'
-    ,'_COMMON':'common'
+    ,'_LIB':'lib'
     ,'_DOCS':'docs'
-    ,'_DIST':'dist'
     ,'_SCRIPTS':'scripts'
     ,'_WWW_HOME':'www'
   }
   _DATA_PATH = {
     '_AUTH':'auth'
     ,'_CFG':'cfg'
-    ,'_DATABASE':'database'
-    ,'_DOWNLOADS':'downloads'
-    ,'_KBANK':'kbank'
-    ,'_LOGS':'logs'
-    ,'_MNT':'mnt'
-    ,'_NPM':'npm-packages'
-    ,'_RELEASE':'release'
-    ,'_REPORTS':'reports'
-    ,'_SAMPLES':'samples'
-    ,'_SITE':'_site'
-    ,'_TFRECORDS':'tfrecords'
-    ,'_TOOLS':'tools'
+    ,'_DB':'database'
+    ,'_REL':'release'
     ,'_TMP':'tmp'
+    ,'_LOGS':'logs'
     ,'_WWW_LOGS':'logs/www'
-    ,'_WWW_UPLOADS':'uploads'
-    ,'_WORKSPACE':'workspaces'
-    ,'_WWW':'public_html'
-    ,'_EXTERNAL':'external'
+    ,'_WWW_UPLOADS':'logs/www/uploads'
+    ,'_VAR':'var'
+    ,'_DOWNLOADS':'var/downloads'
+    ,'_MNT':'mnt'
+    ,'_DIST':'dist'
+    ,'_KB':'var/kbank'
+    ,'_NPM':'var/npm-packages'
+    ,'_RPT':'var/reports'
+    ,'_SMP':'var/samples'
+    ,'_SITE':'var/_site'
+    ,'_TFR':'var/aid/tfrecords'
+    ,'_TOOLS':'var/tools'
+    ,'_WS':'var/workspaces'
+    ,'_WWW':'var/public_html'
+    ,'_EXT':'var/external'
   }
   _MOBILE_PATH = {
     '_ANDROID_HOME':'android/sdk'
@@ -178,68 +192,80 @@ class EnvCfgo(object):
   _LINK = {}
   _ENVCFG = None
 
+
   def __init__(self, options=dict()):
     _opts = [
       '_NAME'
       ,'_ROOT'
       ,'_PREFIX'
-      ,'_IS_TIMESTAMP_DATA_DIR'
-      ,'_VMHOME'
-      ,'_WSGIPythonHome'
-      ,'_APACHE_HOME'
+      ,'_IS_MOBILE_DIR'
+      ,'_IS_DATA_DIR'
+      ,'_IS_VMHOME'
     ]
-    log.debug("options: {}".format(options))
 
+    log.debug("options: {}".format(options))
     if options and len(options) > 0:
       for k,v in options.items():
+        log.debug('k:{}, v:{}'.format(k,v))
         if k in _opts and v is not None and v:
           v = self.app_prefix(v) if k == '_PREFIX' else v
           v = self.app_name(v) if k == '_NAME' else v
           v = self.app_root(v) if k == '_ROOT' else v
           log.debug('k:{}, v:{}'.format(k,v))
           setattr(self, k, v)
-
-    self._ROOT =  self._ROOT if self._ROOT else os.path.join(current_dirpath, "{}-{}".format(os.path.basename(this_dir), 'hub'))
+    ##
+    self._IS_MOBILE_DIR = cast.to_bool(self._IS_MOBILE_DIR) \
+      if self._IS_MOBILE_DIR else False
+    self._IS_DATA_DIR = cast.to_bool(self._IS_DATA_DIR) \
+      if self._IS_DATA_DIR else False
+    self._IS_VMHOME = cast.to_bool(self._IS_VMHOME) \
+      if self._IS_VMHOME else False
+    ##
+    self._ROOT =  self._ROOT if self._ROOT \
+      else os.path.join(current_dirpath, "{}-{}".format(os.path.basename(this_dir), 'hub'))
     self._NAME = self._NAME
     self._HOME =  os.path.join(self._ROOT, "{}".format(self._NAME))
     ##
-    self._IS_TIMESTAMP_DATA_DIR = cast.to_bool(self._IS_TIMESTAMP_DATA_DIR) if self._IS_TIMESTAMP_DATA_DIR else False
-    self._WSGIPythonPath = os.path.join(self._WSGIPythonHome,'bin') if self._WSGIPythonHome else None
-    self._APACHE_HOME = self._APACHE_HOME if self._APACHE_HOME else os.path.join(self._ROOT, 'www')
-    ##
-    self._VMHOME = os.path.join(self._ROOT, 'virtualmachines')
-    self._PYVENV_PATH = os.path.join(self._VMHOME,'virtualenvs')
-    self._PYVENV_HOME = os.path.join(self._HOME, 'virtualenvs')
-    ##
     self._CONFIG = os.path.join(self._HOME, 'config')
-    self._MOBILE_HOME = os.path.join(self._HOME, 'mobile')
     self._CONFIG_ROOT = os.path.join(self._ROOT, "{}-{}".format(self._HOME, 'config'))
-    self._DATA_HOME = os.path.join(self._HOME, 'data')
     self._LOGS_HOME = os.path.join(self._HOME, 'logs')
     self._TMP_HOME = os.path.join(self._HOME, 'tmp')
-
-    self._DATA_ROOT = os.path.join(self._ROOT, "{}-{}".format(self._HOME, 'dat'))
-    self._MOBILE_ROOT = os.path.join(self._ROOT, "{}-{}".format(self._HOME, 'mobile'))
+    ## virtualenv directories
+    if self._IS_VMHOME:
+      self._WSGIPythonPath = os.path.join(self._WSGIPythonHome,'bin') \
+        if self._WSGIPythonHome else None
+      self._VMHOME = os.path.join(self._ROOT, 'virtualmachines')
+      self._PYVENV_PATH = os.path.join(self._VMHOME,'virtualenvs')
+      self._PYVENV_HOME = os.path.join(self._HOME, 'virtualenvs')
+      ## Link dictionary
+      self._LINK[self._PYVENV_HOME] = self._PYVENV_PATH
     ## core directories
     self._PATH = { k: os.path.join(self._HOME, v) for k,v in self._PATH.items() }
     self._DIR_PATH = [os.path.join(self._HOME, d) for d in self._DIR]
     ## Data directories
-    self._DATA_PATH = { k: os.path.join(self._DATA_HOME, v) for k,v in self._DATA_PATH.items() }
-    self._DATA_DIR_PATH = [os.path.join(self._DATA_ROOT, d) for d in self._DATA_DIR]
+    if self._IS_DATA_DIR:
+      self._DATA_HOME = os.path.join(self._HOME, 'data')
+      self._DATA_ROOT = os.path.join(self._ROOT, "{}-{}".format(self._HOME, 'data'))
+      self._DATA_PATH = { k: os.path.join(self._DATA_HOME, v) for k,v in self._DATA_PATH.items() }
+      self._DATA_DIR_PATH = [os.path.join(self._DATA_ROOT, d) for d in self._DATA_DIR]
+      ## Link dictionary
+      self._LINK[self._DATA_HOME] = self._DATA_ROOT
+      self._LINK[self._LOGS_HOME] = self._DATA_PATH['_LOGS']
+      self._LINK[self._TMP_HOME] = self._DATA_PATH['_TMP']
     ## Mobile directories
-    self._MOBILE_PATH = { k: os.path.join(self._MOBILE_HOME, v) for k,v in self._MOBILE_PATH.items() }
-    self._MOBILE_DIR_PATH = [os.path.join(self._MOBILE_ROOT, d) for d in self._MOBILE_DIR]
-    ## www
-    self._APACHE_HOME = self._DATA_PATH['_WWW']
+    if self._IS_MOBILE_DIR:
+      self._MOBILE_HOME = os.path.join(self._HOME, 'mobile')
+      self._MOBILE_ROOT = os.path.join(self._ROOT, "{}-{}".format(self._HOME, 'mobile'))
+      self._MOBILE_PATH = { k: os.path.join(self._MOBILE_HOME, v) for k,v in self._MOBILE_PATH.items() }
+      self._MOBILE_DIR_PATH = [os.path.join(self._MOBILE_ROOT, d) for d in self._MOBILE_DIR]
+      ## Link dictionary
+      self._LINK[self._MOBILE_HOME] = self._MOBILE_ROOT
     ## Link dictionary
     self._LINK[self._CONFIG] = self._CONFIG_ROOT
-    self._LINK[self._DATA_HOME] = self._DATA_ROOT
-    self._LINK[self._MOBILE_HOME] = self._MOBILE_ROOT
-    self._LINK[self._PYVENV_HOME] = self._PYVENV_PATH
-    self._LINK[self._LOGS_HOME] = self._DATA_PATH['_LOGS']
-    self._LINK[self._TMP_HOME] = self._DATA_PATH['_TMP']
     ## alias
-    self._ALIAS = { self.get(a): '"cd ${'+self.get(a)+'}"' for a in self._ALIAS }
+    self._ALIAS = { self.get(a): '"cd ${'+self.get(a)+'}"' \
+                      for a in self._ALIAS if self.is_valid_alias(a)
+                  }
     ## environment configurations
     self._VAR = ":".join([
       self.get(k) for k,v in self.__dict__.items() \
@@ -247,10 +273,13 @@ class EnvCfgo(object):
     ])
     self._ENVCFG = self.get_envcfg()
 
+
   def _fix_prefix(self, d):
     """Caution: recursive function to change the prefix for the keys in the dictionary variables."""
-    d_mod = { self.get(k):d[k] if not dict == type(d[k]) else self._fix_prefix(d[k]) for k in d.keys() }
+    d_mod = { self.get(k):d[k] if not dict == type(d[k]) \
+      else self._fix_prefix(d[k]) for k in d.keys() }
     return d_mod
+
 
   def app_root(self, s=''):
     """app root directory checks."""
@@ -258,13 +287,16 @@ class EnvCfgo(object):
     _root = re.sub('[^A-Za-z\/-]+', '', s) if s else self._ROOT
     log.debug("_root: {}".format(_root))
     if _root == '/':
-      raise IOError('Provide the valid application root directory. System Root ("/") cannot be used directly')
+      raise IOError('Provide the valid application root directory. \
+        System Root ("/") cannot be used directly')
     return _root
+
 
   def app_name(self, s=''):
     """app prefix char should limit to 7 char maximum to avoid too long names."""
     log.debug("app prefix char should limit to 7 char maximum to avoid too long names.")
     return re.sub('[^A-Za-z]+', '', s.lower())[0:7] if s else self._NAME
+
 
   def app_prefix(self, s=''):
     """app prefix char should limit to 3 char maximum to avoid too long names."""
@@ -272,8 +304,23 @@ class EnvCfgo(object):
     _prefix = re.sub('[^A-Za-z]+', '', s.upper())[0:3] if s else self._PREFIX
     return '_'+_prefix
 
+
+  def is_valid_alias(self, a):
+    is_valid = False
+    try:
+      if getattr(self,a) or \
+        a in self._PATH or \
+        a in self._DATA_PATH or \
+        a in self._MOBILE_PATH:
+          is_valid = True
+    except AttributeError: 
+          is_valid = False
+    return is_valid
+
+
   def get(self, a):
     return self._PREFIX+'_'+a.upper().split('__')[-1]
+
 
   def get_kwargs(self):
     kwargs = {}
@@ -282,6 +329,7 @@ class EnvCfgo(object):
       #   continue
       kwargs[attr] = v
     return kwargs
+
 
   def get_envcfg(self):
     """Create the environment config variable based on the required prefix."""

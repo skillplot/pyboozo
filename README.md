@@ -93,11 +93,12 @@ This will create the required directory structure and generate the configuration
   ## check the help menu for options
   boozo --help
   ## run interactively
-  boozo
+  boozo init
   ## different silent execution
-  boozo --root=/boozo-hub --name=boozo --prefix=bzo
-  boozo --root=/boozo-hub --name=boozo --prefix=bzo --gitkeep
-  boozo --root=/boozo-hub --name=boozo --prefix=bzo --gitkeep --timestamp
+  boozo init --root=/boozo-hub --name=boozo --prefix=bzo
+  boozo init --root=/boozo-hub --name=boozo --prefix=bzo --gitkeep
+  boozo init --root=/boozo-hub --name=boozo --prefix=bzo --gitkeep --timestamp
+  boozo init --root=/boozo-hub --name=boozo --prefix=bzo --gitkeep --timestamp --data --mobile --vm
   ```
 
 ### Setup using source code
@@ -121,69 +122,44 @@ This will create the required directory structure and generate the configuration
 * A default `.gitignore` is provided as the starting point; if it's already exists it will NOT be overridden.
 
 
-### Directory Stack - Minimal view
+### Directory Stack view
 
-The directory and files created (minimal view)
-
+The directory and files created
 ```bash
+.
 boozo-hub/
-├── boozo
 │   ├── apps
-│   ├── common
 │   ├── config -> /boozo-hub/boozo-config
-│   ├── data -> /boozo-hub/boozo-dat
-│   ├── dist
+│   ├── data -> /boozo-hub/boozo-data
 │   ├── docs
-│   ├── logs -> /boozo-hub/boozo/data/logs
+│   ├── lib
+│   ├── logs ->  /boozo-hub/boozo/data/logs
 │   ├── mobile -> /boozo-hub/boozo-mobile
+│   ├── notebooks
 │   ├── plugins
 │   ├── practice
+│   ├── projects
 │   ├── scripts
+│   ├── _site
 │   ├── tests
 │   ├── tmp -> /boozo-hub/boozo/data/tmp
 │   ├── virtualenvs -> /boozo-hub/virtualmachines/virtualenvs
 │   └── www
 ├── boozo-config
-│   ├── boozo.alias.sh
-│   ├── boozo.env.sh
-│   ├── boozo.export.sh
-│   └── boozo.yml
-├── boozo-dat
-│   ├── aid
-│   │   └── tfrecords
-│   ├── ant
-│   ├── auth
-│   ├── cfg
-│   ├── cloud
-│   ├── databases
-│   │   └── mongodb
-│   │       ├── configdb
-│   │       ├── db
-│   │       ├── key
-│   │       └── logs
-│   ├── docker
-│   ├── downloads
-│   ├── external
-│   ├── kbank
-│   ├── logs
-│   │   └── www
-│   ├── mnt
-│   ├── mobile
-│   ├── npm-packages
-│   ├── public
-│   ├── public_html
-│   ├── release
-│   │   ├── keras
-│   │   └── torch
-│   ├── reports
-│   ├── samples
-│   ├── _site
-│   ├── team
-│   │   └── images
-│   ├── tmp
-│   ├── tools
-│   ├── uploads
-│   └── workspaces
+│   ├── blah.alias.sh
+│   ├── blah.env
+│   ├── blah.export.sh
+│   └── blah.yml
+├── boozo-data
+│   ├── auth -> .auth-211020_050725
+│   ├── cfg -> .cfg-211020_050725
+│   ├── databases -> .databases-211020_050725
+│   ├── dist -> .dist-211020_050725
+│   ├── logs -> .logs-211020_050725
+│   ├── mnt -> .mnt-211020_050725
+│   ├── release -> .release-211020_050725
+│   ├── tmp -> .tmp-211020_050725
+│   └── var -> .var-211020_050725
 ├── boozo-mobile
 │   └── android
 │       ├── apps
@@ -194,226 +170,9 @@ boozo-hub/
 └── virtualmachines
     └── virtualenvs
 
-62 directories, 4 files
+38 directories, 4 files
 ```
 
-### Directory Stack - Complete Expanded view
-
-The directory and files created (Complete Expanded view, shown for non-timestamped data directory setup)
-
-```bash
-boozo-hub/
-├── boozo
-│   ├── apps
-│   │   └── .gitkeep
-│   ├── common
-│   │   └── .gitkeep
-│   ├── config -> /boozo-hub/boozo-config
-│   │   ├── boozo.alias.sh
-│   │   ├── boozo.env.sh
-│   │   ├── boozo.export.sh
-│   │   ├── boozo.yml
-│   │   └── .gitkeep
-│   ├── data -> /boozo-hub/boozo-dat
-│   │   ├── aid
-│   │   │   ├── .gitkeep
-│   │   │   └── tfrecords
-│   │   │       └── .gitkeep
-│   │   ├── ant
-│   │   │   └── .gitkeep
-│   │   ├── auth
-│   │   │   └── .gitkeep
-│   │   ├── cfg
-│   │   │   └── .gitkeep
-│   │   ├── cloud
-│   │   │   └── .gitkeep
-│   │   ├── databases
-│   │   │   ├── .gitkeep
-│   │   │   └── mongodb
-│   │   │       ├── configdb
-│   │   │       │   └── .gitkeep
-│   │   │       ├── db
-│   │   │       │   └── .gitkeep
-│   │   │       ├── .gitkeep
-│   │   │       ├── key
-│   │   │       │   └── .gitkeep
-│   │   │       └── logs
-│   │   │           └── .gitkeep
-│   │   ├── docker
-│   │   │   └── .gitkeep
-│   │   ├── downloads
-│   │   │   └── .gitkeep
-│   │   ├── external
-│   │   │   └── .gitkeep
-│   │   ├── kbank
-│   │   │   └── .gitkeep
-│   │   ├── logs
-│   │   │   ├── .gitkeep
-│   │   │   └── www
-│   │   │       └── .gitkeep
-│   │   ├── mnt
-│   │   │   └── .gitkeep
-│   │   ├── mobile
-│   │   │   └── .gitkeep
-│   │   ├── npm-packages
-│   │   │   └── .gitkeep
-│   │   ├── public
-│   │   │   └── .gitkeep
-│   │   ├── public_html
-│   │   │   └── .gitkeep
-│   │   ├── release
-│   │   │   ├── .gitkeep
-│   │   │   ├── keras
-│   │   │   │   └── .gitkeep
-│   │   │   └── torch
-│   │   │       └── .gitkeep
-│   │   ├── reports
-│   │   │   └── .gitkeep
-│   │   ├── samples
-│   │   │   └── .gitkeep
-│   │   ├── _site
-│   │   │   └── .gitkeep
-│   │   ├── team
-│   │   │   ├── .gitkeep
-│   │   │   └── images
-│   │   │       └── .gitkeep
-│   │   ├── tmp
-│   │   │   └── .gitkeep
-│   │   ├── tools
-│   │   │   └── .gitkeep
-│   │   ├── uploads
-│   │   │   └── .gitkeep
-│   │   └── workspaces
-│   │       └── .gitkeep
-│   ├── dist
-│   │   └── .gitkeep
-│   ├── docs
-│   │   └── .gitkeep
-│   ├── .gitignore
-│   ├── logs -> /boozo-hub/boozo/data/logs
-│   ├── mobile -> /boozo-hub/boozo-mobile
-│   │   └── android
-│   │       ├── apps
-│   │       │   └── .gitkeep
-│   │       ├── dist
-│   │       │   └── .gitkeep
-│   │       ├── external
-│   │       │   └── .gitkeep
-│   │       ├── .gitkeep
-│   │       ├── plugins
-│   │       │   └── .gitkeep
-│   │       └── sdk
-│   │           └── .gitkeep
-│   ├── plugins
-│   │   └── .gitkeep
-│   ├── practice
-│   │   └── .gitkeep
-│   ├── scripts
-│   │   └── .gitkeep
-│   ├── tests
-│   │   └── .gitkeep
-│   ├── tmp -> /boozo-hub/boozo/data/tmp
-│   ├── virtualenvs -> /boozo-hub/virtualmachines/virtualenvs
-│   │   └── .gitkeep
-│   └── www
-│       └── .gitkeep
-├── boozo-config
-│   ├── boozo.alias.sh
-│   ├── boozo.env.sh
-│   ├── boozo.export.sh
-│   ├── boozo.yml
-│   └── .gitkeep
-├── boozo-dat
-│   ├── aid
-│   │   ├── .gitkeep
-│   │   └── tfrecords
-│   │       └── .gitkeep
-│   ├── ant
-│   │   └── .gitkeep
-│   ├── auth
-│   │   └── .gitkeep
-│   ├── cfg
-│   │   └── .gitkeep
-│   ├── cloud
-│   │   └── .gitkeep
-│   ├── databases
-│   │   ├── .gitkeep
-│   │   └── mongodb
-│   │       ├── configdb
-│   │       │   └── .gitkeep
-│   │       ├── db
-│   │       │   └── .gitkeep
-│   │       ├── .gitkeep
-│   │       ├── key
-│   │       │   └── .gitkeep
-│   │       └── logs
-│   │           └── .gitkeep
-│   ├── docker
-│   │   └── .gitkeep
-│   ├── downloads
-│   │   └── .gitkeep
-│   ├── external
-│   │   └── .gitkeep
-│   ├── kbank
-│   │   └── .gitkeep
-│   ├── logs
-│   │   ├── .gitkeep
-│   │   └── www
-│   │       └── .gitkeep
-│   ├── mnt
-│   │   └── .gitkeep
-│   ├── mobile
-│   │   └── .gitkeep
-│   ├── npm-packages
-│   │   └── .gitkeep
-│   ├── public
-│   │   └── .gitkeep
-│   ├── public_html
-│   │   └── .gitkeep
-│   ├── release
-│   │   ├── .gitkeep
-│   │   ├── keras
-│   │   │   └── .gitkeep
-│   │   └── torch
-│   │       └── .gitkeep
-│   ├── reports
-│   │   └── .gitkeep
-│   ├── samples
-│   │   └── .gitkeep
-│   ├── _site
-│   │   └── .gitkeep
-│   ├── team
-│   │   ├── .gitkeep
-│   │   └── images
-│   │       └── .gitkeep
-│   ├── tmp
-│   │   └── .gitkeep
-│   ├── tools
-│   │   └── .gitkeep
-│   ├── uploads
-│   │   └── .gitkeep
-│   └── workspaces
-│       └── .gitkeep
-├── boozo-mobile
-│   └── android
-│       ├── apps
-│       │   └── .gitkeep
-│       ├── dist
-│       │   └── .gitkeep
-│       ├── external
-│       │   └── .gitkeep
-│       ├── .gitkeep
-│       ├── plugins
-│       │   └── .gitkeep
-│       └── sdk
-│           └── .gitkeep
-└── virtualmachines
-    ├── .gitkeep
-    └── virtualenvs
-        └── .gitkeep
-
-103 directories, 105 files
-```
 
 ## Debugging
 

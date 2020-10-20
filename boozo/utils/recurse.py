@@ -4,12 +4,14 @@ __author__ = 'mangalbhaskar'
 
 import os
 
+
 def dict_keys_to_lowercase(d):
   """Converts all the dictionary keys to lowercase in
   recursive function call.
   """
   d_mod = { k.lower():d[k] if not isinstance(d[k],dict) else dict_keys_to_lowercase(d[k]) for k in d.keys() }
   return d_mod
+
 
 def get_from_dict(dictionary, keys=None):
   """recursive generator to fetch the non-dict values in the nested dictory.
@@ -25,6 +27,7 @@ def get_from_dict(dictionary, keys=None):
       yield val, vval
     if type(vval) == dict:
       yield from get_from_dict(vval)
+
 
 def get_basepath(p):
   """Ensures the last Directory of a path in a consistent ways.

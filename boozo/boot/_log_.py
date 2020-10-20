@@ -7,14 +7,11 @@ References:
 """
 __author__ = 'mangalbhaskar'
 
-import os
+__all_ = [
+  'log'
+  ,'_GEN_LOG_LEVEL_'
+]
 
-_PYBOOZO_LOG_LEVEL_ = os.getenv('_PYBOOZO_LOG_LEVEL_')
-
-_PYBOOZO_LOG_LEVEL_ = _PYBOOZO_LOG_LEVEL_.upper() if _PYBOOZO_LOG_LEVEL_ \
-                        and _PYBOOZO_LOG_LEVEL_ in ['CRITICAL','ERROR','WARNING','INFO','DEBUG','NOTSET'] \
-                            else 'ERROR'
-print('_PYBOOZO_LOG_LEVEL_ is: {}'.format(_PYBOOZO_LOG_LEVEL_))
 
 logcfg = {
     'version': 1,
@@ -85,4 +82,20 @@ logcfg = {
     }
 }
 
+import logging
+import logging.config
+import os
+
+_PYBOOZO_LOG_LEVEL_ = os.getenv('_PYBOOZO_LOG_LEVEL_')
+
+_PYBOOZO_LOG_LEVEL_ = _PYBOOZO_LOG_LEVEL_.upper() if _PYBOOZO_LOG_LEVEL_ \
+                        and _PYBOOZO_LOG_LEVEL_ in ['CRITICAL','ERROR','WARNING','INFO','DEBUG','NOTSET'] \
+                            else 'DEBUG'
+print('Current Logger Level [_PYBOOZO_LOG_LEVEL_] is: {}'.format(_PYBOOZO_LOG_LEVEL_))
+
 logcfg['loggers']['__main__']['level'] = _PYBOOZO_LOG_LEVEL_
+
+
+log = logging.getLogger('__main__.'+__name__)
+logging.config.dictConfig(logcfg)
+

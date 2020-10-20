@@ -1,7 +1,12 @@
-## Blacklist files/folders in same directory as the .gitignore file
+## __author__ = 'mangalbhaskar'
+## disallow files/folders in same directory as the .gitignore file
+
 /*
 
-## Whitelist some files
+## allow some files
+!.dockerignore
+!.gitattributes
+!.nojekyll
 !.gitignore
 !.gitmodules
 !*.md
@@ -14,33 +19,52 @@
 !*.cfg
 !*.example
 !*.toml
+!*.env
+!*.in
+!*.ini
 !LICENSE*
 
+!auth/
 !apps/
+!cache/
+!cfg/
+!config/
 !common/
-##!dist/
+!data/
 !docs/
-!mobile/
+#!mobile/
+!external/
+!marketplace/
+!notebooks/
 !plugins/
 !practice/
+!projects/
 !scripts/
 !tests/
 !www/
 
-scripts/config/*.export.sh
+## disallow some specific files in the allowed list
 **/*~
 **/*.swp
 **/nohup.*
 **/*.log
 **/*bk
 **/temp.*
+
+**/local
+**/.local
+**/*.local
 **/*.local.*
+
 **/README.html
 **/node_modules
 **/*.pyc
 **/*__pycache__
 **/*.ipynb_checkpoints
+**/*.pytest_cache
 **/*.py.*
+# **/*.mp4
+# **/*.mp3
 
 !mobile/android/apps
 
@@ -55,15 +79,8 @@ mobile/android/apps/external/*
 **/.gradle
 **/.idea
 **/.externalNativeBuild
-**/gradle
-**/captures
-**/screenshot
 **/*.iml
 **/.DS_Store
-**/.gradle
-**/.idea
-**/.externalNativeBuild
-
 **/build
 **/dist
 **/bin
